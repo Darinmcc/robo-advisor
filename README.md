@@ -1,50 +1,58 @@
 # robo-advisor
-Setup
-Repo Setup
-Use the GitHub.com online interface to create a new remote project repository called something like "robo-advisor". When prompted by the GitHub.com online interface, let's get in the habit of adding a "README.md" file and a Python-flavored ".gitignore" file (and also optionally a "LICENSE") during the repo creation process. After this process is complete, you should be able to view the repo on GitHub.com at an address like https://github.com/YOUR_USERNAME/robo-advisor.
 
-After creating the remote repo, use GitHub Desktop software or the command-line to download or "clone" it onto your computer. Choose a familiar download location like the Desktop.
+Issues requests to the [AlphaVantage Stock Market API](https://www.alphavantage.co/) in order to provide automated stock or cryptocurrency trading recommendations.
+
+## Prerequisites
+
+  + Anaconda 3.7
+  + Python 3.7
+  + Pip
+
+## Installation
+
+Fork this repository under your own control, then clone or download the resulting repository onto your computer. Then navigate there from the command line:
 
 After cloning the repo, navigate there from the command-line:
 
 cd ~/Desktop/robo-advisor
-Use your text editor or the command-line to create a new sub-directory called "app" with a file called "robo_advisor.py", and then place the following contents inside:
 
-# app/robo_advisor.py
 
-print("-------------------------")
-print("SELECTED SYMBOL: XYZ")
-print("-------------------------")
-print("REQUESTING STOCK MARKET DATA...")
-print("REQUEST AT: 2018-02-20 02:00pm")
-print("-------------------------")
-print("LATEST DAY: 2018-02-20")
-print("LATEST CLOSE: $100,000.00")
-print("RECENT HIGH: $101,000.00")
-print("RECENT LOW: $99,000.00")
-print("-------------------------")
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
-print("-------------------------")
-print("HAPPY INVESTING!")
-print("-------------------------")
-Make sure to save Python files like this whenever you're done editing them. After setting up a virtual environment, we will be ready to run this file.
-
-Use your text editor or the command-line to create a new file called "requirements.txt", and then place the following contents inside:
-
-requests
-python-dotenv
-After setting up a virtual environment, we will be ready to install these packages.
-
-Environment Setup
+#Environment Setup
 Create and activate a new Anaconda virtual environment:
 
 conda create -n stocks-env python=3.7 # (first time only)
+
 conda activate stocks-env
-From within the virtual environment, install the required packages specified in the "requirements.txt" file you created:
+
+From within the virtual environment, install the required packages specified in the "requirements.txt":
 
 pip install -r requirements.txt
 pip install pytest # (only if you'll be writing tests)
-From within the virtual environment, demonstrate your ability to run the Python script from the command-line:
 
-python robo_advisor.py
+#Alphavantage
+
+Your program will need an API Key to issue requests to the AlphaVantage API. 
+
+go to "GET YOUR FREE API KEY TODAY"
+
+https://www.alphavantage.co/
+
+
+#Security Requirements
+
+The program's source code should absolutely not include the secret API Key value. To not include the API key:
+
+Create a file called ".env" and place the environment variable in the ".env" file
+
+Set an environment variable called ALPHAVANTAGE_API_KEY:
+
+ALPHAVANTAGE_API_KEY="abc123"
+
+The local ".gitignore" file prevents the ".env" file and its contents from being tracked
+
+
+## Usage
+
+from the command-line:
+
+python app/robo_advisor.py
