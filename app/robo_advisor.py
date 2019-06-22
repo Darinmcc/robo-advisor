@@ -2,7 +2,9 @@
 
 import requests # to make requests for https package - need to install request package in virtual environme
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
+import datetime
 
+now = datetime.datetime.now()
 #
 # INFO INPUTS
 #
@@ -42,7 +44,7 @@ print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
-print(f"REQUEST AT: {last_refreshed}")
+print(f"REQUEST AT: {now}")
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
 print("LATEST CLOSE: $100,000.00")
