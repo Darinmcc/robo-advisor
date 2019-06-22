@@ -4,9 +4,9 @@ import requests # to make requests for https package - need to install request p
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
 import datetime
 
-now = datetime.datetime.now().replace(microsecond=0)
+def to_usd(my_price):
+    return "${0:,.2f}".format(my_price)
 
-AMPM = now.strftime("%p")
 
 #
 # INFO INPUTS
@@ -36,12 +36,25 @@ parsed_response = json.loads(response.text) # variable, parse str to dict
 #INFO OUTPUTS
 #
 
+
+
+now = datetime.datetime.now().replace(microsecond=0)
+
+AMPM = now.strftime("%p")
+today = datetime.date.today()
+prev_day = datetime.date.today()-datetime.timedelta(1)
+
+
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
 
+latest_close = parsed_response["Time Series (Daily)"][f"{prev_day}"]["4. close"]
+recent_high = parsed_response["Time Series (Daily)"][f"{prev_day}"]["2. high"]
+recent_low = parsed_response["Time Series (Daily)"][f"{prev_day}"]["3. low"]
 
-
-
+latest_close_usd = to_usd(float(latest_close))
+recent_high_usd = to_usd(float(recent_high))
+recent_low_usd = to_usd(float(recent_low))
 
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
@@ -50,9 +63,9 @@ print("REQUESTING STOCK MARKET DATA...")
 print(f"REQUEST AT: {now} {AMPM}")
 print("-------------------------")
 print(f"LATEST DAY: {last_refreshed}")
-print("LATEST CLOSE: $100,000.00")
-print("RECENT HIGH: $101,000.00")
-print("RECENT LOW: $99,000.00")
+print(f"LATEST CLOSE: {latest_close_usd}")
+print(f"RECENT HIGH: {recent_high_usd}")
+print(f"RECENT LOW: {recent_low_usd}")
 print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
