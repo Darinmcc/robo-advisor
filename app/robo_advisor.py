@@ -1,10 +1,12 @@
 # app/robo_advisor.py
 
 import requests # to make requests for https package - need to install request package in virtual environme
+
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
-import datetime
-import calendar
-import csv
+import datetime #module
+import calendar # module
+import csv # module
+import os # module
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
@@ -125,7 +127,8 @@ print("-------------------------")
 
 
 
-csv_file_path = "data/prices.csv" # a relative filepath,csv_file_path is variable don't vhnage
+csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
+
 
 with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
     writer = csv.DictWriter(csv_file, fieldnames=["city", "name"])
