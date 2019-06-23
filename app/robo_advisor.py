@@ -3,9 +3,18 @@
 import requests # to make requests for https package - need to install request package in virtual environme
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
 import datetime
+import calendar
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
+
+def weekday(good_date):
+    if good_date == 5:
+        return prev_day
+    elif good_date == 6:
+        return two_days
+    else:
+        return today
 
 
 #
@@ -43,18 +52,27 @@ now = datetime.datetime.now().replace(microsecond=0)
 AMPM = now.strftime("%p")
 today = datetime.date.today()
 prev_day = datetime.date.today()-datetime.timedelta(1)
-
+two_days = datetime.date.today()-datetime.timedelta(2)
+today_year = today.year
+today_month = today.month
+today_day = today.day
 
 last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 
 
-latest_close = parsed_response["Time Series (Daily)"][f"{prev_day}"]["4. close"]
-recent_high = parsed_response["Time Series (Daily)"][f"{prev_day}"]["2. high"]
-recent_low = parsed_response["Time Series (Daily)"][f"{prev_day}"]["3. low"]
+#print(calendar.weekday(2019,6,26))
+weekdaynum = calendar.weekday(today_year,today_month,today_day)
+last_tradedate = weekday(weekdaynum)
+
+latest_close = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["4. close"]
+recent_high = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"]
+recent_low = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["3. low"]
 
 latest_close_usd = to_usd(float(latest_close))
 recent_high_usd = to_usd(float(recent_high))
 recent_low_usd = to_usd(float(recent_low))
+
+#breakpoint()
 
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
