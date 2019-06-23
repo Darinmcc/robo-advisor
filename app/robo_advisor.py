@@ -67,7 +67,7 @@ last_tradedate = weekday(weekdaynum)
 tsd = parsed_response["Time Series (Daily)"]
 dates = list(tsd.keys())
 
-
+latest_close = tsd[f"{last_tradedate}"]["4. close"]
 
 high_prices = []
 
@@ -77,9 +77,14 @@ for date in dates:
 recent_high = max(high_prices)
 
 
-latest_close = tsd[f"{last_tradedate}"]["4. close"]
+low_prices = []
 
-recent_low = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["3. low"]
+for date in dates:
+    low_price = tsd[date]["3. low"]
+    low_prices.append(float(low_price))
+recent_low = min(low_prices)
+
+
 
 #max_high = [high for high in parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"] ]
 
