@@ -64,15 +64,31 @@ last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
 weekdaynum = calendar.weekday(today_year,today_month,today_day)
 last_tradedate = weekday(weekdaynum)
 
-latest_close = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["4. close"]
+tsd = parsed_response["Time Series (Daily)"]
+dates = list(tsd.keys())
+date = str(tsd.keys())
+print(type(date))
+
+
+latest_close = tsd[f"{last_tradedate}"]["4. close"]
 recent_high = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"]
 recent_low = parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["3. low"]
+
+#max_high = [high for high in parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"] ]
+
+for h in tsd[f"{date}"]:
+    print(h)
 
 latest_close_usd = to_usd(float(latest_close))
 recent_high_usd = to_usd(float(recent_high))
 recent_low_usd = to_usd(float(recent_low))
 
-#breakpoint()
+
+#assumes latest day is first, consider sorting
+#tsd = parsed_response["Time Series (Daily)"]
+#dates = list(tsd.keys())
+#dates[0]
+
 
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
