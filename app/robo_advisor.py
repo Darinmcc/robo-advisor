@@ -4,6 +4,7 @@ import requests # to make requests for https package - need to install request p
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
 import datetime
 import calendar
+import csv
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
@@ -117,5 +118,19 @@ print("-------------------------")
 print("RECOMMENDATION: BUY!")
 print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
+print("WRITING DATA TO CSV")
+print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+
+
+csv_file_path = "data/prices.csv" # a relative filepath,csv_file_path is variable don't vhnage
+
+with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
+    writer = csv.DictWriter(csv_file, fieldnames=["city", "name"])
+    writer.writeheader() # uses fieldnames set above
+    writer.writerow({"city": "New York", "name": "Yankees"})
+    writer.writerow({"city": "New York", "name": "Mets"})
+    writer.writerow({"city": "Boston", "name": "Red Sox"})
+    writer.writerow({"city": "New Haven", "name": "Ravens"})
