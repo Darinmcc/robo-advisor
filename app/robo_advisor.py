@@ -16,9 +16,6 @@ load_dotenv() #> loads contents of the .env file into the script's environment
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
-
-
-
 #
 # INFO INPUTS
 #
@@ -38,10 +35,12 @@ api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={uppersymbol}&apikey={api_key}" # variable for Url
 
 response = requests.get(request_url) #< response variable - sends get requests, specify the URL for the request - see documentation
-risk_options = ["cautious", "balanced", "aggressive"]
-risk_profile = input("Please enter your risk tolerance: 'cautious', 'balanced', 'aggressive' \n")
-if risk_profile not in risk_options:
-    print("Risk profile should be: 'cautious', 'balanced', or 'aggressive'. Please try again")
+
+risk_options = ["LOW", "MEDIUM", "HIGH"]
+risk_profile = input("Please enter your risk tolerance: 'LOW', 'MEDIUM', 'HIGH' \n")
+upper_risk_profile = risk_profile.upper()
+if upper_risk_profile not in risk_options:
+    print("Risk profile should be: 'LOW', 'MEDIUM', or 'HIGH'. Please try again")
     exit()
 
 #print(type(response)) <data type - class 'requests.models.Response
@@ -133,21 +132,21 @@ print(mean)
 print(mode)
 print(vol)
 
-if risk_profile == "aggressive":
+if upper_risk_profile == "HIGH":
     if float_latest_close <= mean and vol > .2:
         recommendation = "BUY!"
-        recommendation_reason = f"Price is below average close: {to_usd(mean)} and volatility is high, should expect a swing upwards"
+        recommendation_reason = f"Price is below average close: {to_usd(mean)}, a lot of potential reward and volatility is high"
     elif float_latest_close > mean and vol > .2:
         recommendation = "HOLD"
-        recommendation_reason = f"Price is above average close: {to_usd(mean)}, could be expensive but is on the move "
+        recommendation_reason = f"Price is above average close: {to_usd(mean)}, could be expensive, but is on the move "
     else:
         recommendation = "SELL!"
         recommendation_reason = f"Symbol doesn't have the price action that you crave"
 
-if risk_profile == "conservative":
+if upper_risk_profile == "LOW":
     if float_latest_close >= mean and vol < .1:
         recommendation = "BUY!"
-        recommendation_reason = f"Price is above average close: {to_usd(mean)} and volatility is low"
+        recommendation_reason = f"Price is above average close: {to_usd(mean)}, buy into strength and volatility is low"
     elif float_latest_close < mean and vol < .1:
         recommendation = "HOLD"
         recommendation_reason = f"Price is below average close: {to_usd(mean)}, price could be on a downswing and volatility is low"
@@ -155,6 +154,16 @@ if risk_profile == "conservative":
         recommendation = "SELL!"
         recommendation_reason = "Volatility is higher than risk profile would warrant"
 
+if upper_risk_profile == "MEDIUM":
+    if float_latest_close >= mean and .05 <= vol <= .15:
+        recommendation = "BUY!"
+        recommendation_reason = f"Price is above average close: {to_usd(mean)}, buy into strength and volatility is in the desired threshold"
+    elif float_latest_close < mean and .05 <= vol <= .15:
+        recommendation = "HOLD"
+        recommendation_reason = f"Price is below average close: {to_usd(mean)}, price indicates current period of weakness, but volatility is in the desired threshold"
+    else:
+        recommendation = "SELL!"
+        recommendation_reason = "Volatility is outside the desired threshold"
 
 print("-------------------------")
 print(f"SELECTED SYMBOL: {uppersymbol}")
