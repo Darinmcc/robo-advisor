@@ -8,6 +8,7 @@ import datetime #module
 import calendar # module
 import csv # module
 import os # module
+import statistics # statistic module
 
 load_dotenv() #> loads contents of the .env file into the script's environment
 
@@ -84,6 +85,15 @@ for date in dates:
     low_prices.append(float(low_price))
 recent_low = min(low_prices)
 
+closing_prices = []
+
+for date in dates:
+    closing_price = tsd[date]["4. close"]
+    closing_prices.append(float(close_price))
+mean = statistics.mean(closing_prices) #> 4.666666666666667
+mode = statistics.median(closing_prices) #> 4
+
+
 #max_high = [high for high in parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"] ]
 
 latest_close_usd = to_usd(float(latest_close))
@@ -114,6 +124,9 @@ with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writin
 
 #timestamp, open, high, low, close, volume
 #2018-06-04, 101.2600, 101.8600, 100.8510, 101.6700, 27172988
+
+print(mean)
+print(mode)
 
 print("-------------------------")
 print(f"SELECTED SYMBOL: {uppersymbol}")
