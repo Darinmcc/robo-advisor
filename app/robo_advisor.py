@@ -15,13 +15,7 @@ load_dotenv() #> loads contents of the .env file into the script's environment
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
-def weekday(good_date):
-    if good_date == 5:
-        return prev_day
-    elif good_date == 6:
-        return two_days
-    else:
-        return today
+
 
 
 #
@@ -30,27 +24,34 @@ def weekday(good_date):
 print("Welcome to Robo Advisor!")
 print("------------------------")
 symbol = input("Enter stock symbol:")
+uppersymbol = symbol.upper()
+#breakpoint()
+if symbol.isalpha() != True:
+    print("Not a valid stock symbol. Please re-run")
+    exit()
+elif len(symbol) > 4:
+    print("Not a valid stock symbol. Please re-run")
+    exit()
+
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
-request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}" # variable for Url
+request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={uppersymbol}&apikey={api_key}" # variable for Url
 
 response = requests.get(request_url) #< response variable - sends get requests, specify the URL for the request - see documentation
+risk_options = ["cautious", "balanced", "aggressive"]
+risk_profile = input("Please enter your risk tolerance: 'cautious', 'balanced', 'aggressive'      ")
+if risk_profile not in risk_options:
+    print("Risk profile should be: 'cautious', 'balanced', or 'aggressive'. Please try again")
+    exit()
 
 #print(type(response)) <data type - class 'requests.models.Response
-
 #print(response.status_code) <200 - successful #status code attribute - https lets us know how successful the request was, and 
-
 #print(response.text) <actual body of response. #string need to convert to dictionary
-
 #print(type(response.text)) <class 'str'
 
 parsed_response =json.loads(response.text) # variable, parse str to dict
 
-#breakpoint()
-
 #parsed_reponse - type() = dict, parsed_reponse.keys() = top keys
 #parsed_response["Meta Data"].keys()
-
-
 
 #
 #INFO OUTPUTS
@@ -113,9 +114,9 @@ with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writin
 
 #timestamp, open, high, low, close, volume
 #2018-06-04, 101.2600, 101.8600, 100.8510, 101.6700, 27172988
-  
+
 print("-------------------------")
-print("SELECTED SYMBOL: XYZ")
+print(f"SELECTED SYMBOL: {uppersymbol}")
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print(f"REQUEST AT: {now} {AMPM}")
@@ -133,7 +134,13 @@ print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
 
-
+#def weekday(good_date):
+    #if good_date == 5:
+        #return prev_day
+    #elif good_date == 6:
+        #return two_days
+    #else:
+        #return today
 #today = datetime.date.today()
 #prev_day = datetime.date.today()-datetime.timedelta(1)
 #two_days = datetime.date.today()-datetime.timedelta(2)
