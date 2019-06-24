@@ -109,23 +109,20 @@ csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.cs
  #don't change csv file path or __file__ variable
  #file starts in app directory
 
-CSV_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
 
 with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
-    writer = csv.DictWriter(csv_file, fieldnames=CSV_headers)
+    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
     writer.writeheader() # uses fieldnames set above
-
-
-    writer.writerow({
-        "city": "New York",
-         "name": "Yankees",
-         "timestamp":, 
-         "open":, 
-         "high":, 
-         "low":, 
-         "close":, 
-         "volume":
-         })
+    for date in dates:
+        writer.writerow({
+        "timestamp": date, 
+        "open":tsd[date]["1. open"], 
+        "high":tsd[date]["2. high"], 
+        "low":tsd[date]["3. low"], 
+        "close":tsd[date]["4. close"], 
+        "volume":tsd[date]["5. volume"]
+        })
 
 #timestamp, open, high, low, close, volume
 #2018-06-04, 101.2600, 101.8600, 100.8510, 101.6700, 27172988
