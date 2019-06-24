@@ -27,7 +27,9 @@ def weekday(good_date):
 #
 # INFO INPUTS
 #
-symbol = "MSFT"
+print("Welcome to Robo Advisor!")
+print("------------------------")
+symbol = input("Enter stock symbol:")
 api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
 request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}" # variable for Url
 
@@ -41,7 +43,7 @@ response = requests.get(request_url) #< response variable - sends get requests, 
 
 #print(type(response.text)) <class 'str'
 
-parsed_response = json.loads(response.text) # variable, parse str to dict
+parsed_response =json.loads(response.text) # variable, parse str to dict
 
 #breakpoint()
 
@@ -54,29 +56,17 @@ parsed_response = json.loads(response.text) # variable, parse str to dict
 #INFO OUTPUTS
 #
 
-
-
 now = datetime.datetime.now().replace(microsecond=0)
-
 AMPM = now.strftime("%p")
-today = datetime.date.today()
-prev_day = datetime.date.today()-datetime.timedelta(1)
-two_days = datetime.date.today()-datetime.timedelta(2)
-today_year = today.year
-today_month = today.month
-today_day = today.day
 
-last_refreshed = parsed_response["Meta Data"]["3. Last Refreshed"]
+last_refreshed =parsed_response["Meta Data"]["3. Last Refreshed"]
 
-
-#print(calendar.weekday(2019,6,26))
-weekdaynum = calendar.weekday(today_year,today_month,today_day)
-last_tradedate = weekday(weekdaynum)
-
-tsd = parsed_response["Time Series (Daily)"]
-dates = list(tsd.keys())
-
-latest_close = tsd[f"{last_tradedate}"]["4. close"]
+tsd =parsed_response["Time Series (Daily)"]
+#assumes latest day is first, consider sorting
+#dates[0]
+dates =list(tsd.keys())
+last_close = dates[0]
+latest_close = tsd[last_close]["4. close"]
 
 high_prices = []
 
@@ -93,23 +83,14 @@ for date in dates:
     low_prices.append(float(low_price))
 recent_low = min(low_prices)
 
-
-
 #max_high = [high for high in parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"] ]
-
-
-# breakpoint()
-    
 
 latest_close_usd = to_usd(float(latest_close))
 recent_high_usd = to_usd(float(recent_high))
 recent_low_usd = to_usd(float(recent_low))
 
 
-#assumes latest day is first, consider sorting
-#tsd = parsed_response["Time Series (Daily)"]
-#dates = list(tsd.keys())
-#dates[0]
+
 
 csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
  #don't change csv file path or __file__ variable
@@ -121,18 +102,18 @@ with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writin
     writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
     writer.writeheader() # uses fieldnames set above
     for date in dates:
+        daily_prices = tsd[date]
         writer.writerow({
-        "timestamp": date, 
-        "open":tsd[date]["1. open"], 
-        "high":tsd[date]["2. high"], 
-        "low":tsd[date]["3. low"], 
-        "close":tsd[date]["4. close"], 
-        "volume":tsd[date]["5. volume"]
-        })
+            "timestamp": date, 
+            "open": daily_prices["1. open"], 
+            "high": daily_prices["2. high"], 
+            "low": daily_prices["3. low"], 
+            "close": daily_prices["4. close"], 
+            "volume": daily_prices["5. volume"]})
 
 #timestamp, open, high, low, close, volume
 #2018-06-04, 101.2600, 101.8600, 100.8510, 101.6700, 27172988
-    
+  
 print("-------------------------")
 print("SELECTED SYMBOL: XYZ")
 print("-------------------------")
@@ -153,4 +134,12 @@ print("HAPPY INVESTING!")
 print("-------------------------")
 
 
-
+#today = datetime.date.today()
+#prev_day = datetime.date.today()-datetime.timedelta(1)
+#two_days = datetime.date.today()-datetime.timedelta(2)
+#today_year = today.year
+#today_month = today.month
+#today_day = today.day
+#print(calendar.weekday(2019,6,26))
+#weekdaynum = calendar.weekday(today_year,today_month,today_day)
+#last_tradedate = weekday(weekdaynum)
