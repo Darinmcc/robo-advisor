@@ -1,12 +1,16 @@
 # app/robo_advisor.py
 
 import requests # to make requests for https package - need to install request package in virtual environme
+from dotenv import load_dotenv
 
 import json #use to convert json string to dictionary #module don't need to install in virtual part of python
 import datetime #module
 import calendar # module
 import csv # module
 import os # module
+
+load_dotenv() #> loads contents of the .env file into the script's environment
+
 
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
@@ -23,7 +27,9 @@ def weekday(good_date):
 #
 # INFO INPUTS
 #
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo" # variable for Url
+symbol = "MSFT"
+api_key = os.environ.get("ALPHAVANTAGE_API_KEY")
+request_url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}" # variable for Url
 
 response = requests.get(request_url) #< response variable - sends get requests, specify the URL for the request - see documentation
 
