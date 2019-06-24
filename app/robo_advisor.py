@@ -134,18 +134,18 @@ print(mode)
 print(vol)
 
 if risk_profile == "aggressive":
-    if float_latest_close < mean and vol > .2:
+    if float_latest_close <= mean and vol > .2:
         recommendation = "BUY!"
-        recommendation_reason = f"Price below average close: {to_usd(mean)} and volatility is high"
-    elif float_latest_close < mean:
+        recommendation_reason = f"Price is below average close: {to_usd(mean)} and volatility is high, should expect a swing upwards"
+    elif float_latest_close > mean and vol > .2:
         recommendation = "HOLD"
-        recommendation_reason = f"Price is below average close: {to_usd(mean)} , could take some time for price to recover"
+        recommendation_reason = f"Price is above average close: {to_usd(mean)}, could be expensive but is on the move "
     else:
         recommendation = "SELL!"
-        recommendation_reason = f"Price is at or above average close: {to_usd(mean)} , could be overvalued"
+        recommendation_reason = f"Symbol doesn't have the price action that you crave"
 
 if risk_profile == "conservative":
-    if float_latest_close > mean and vol < .1:
+    if float_latest_close >= mean and vol < .1:
         recommendation = "BUY!"
         recommendation_reason = f"Price is above average close: {to_usd(mean)} and volatility is low"
     elif float_latest_close < mean and vol < .1:
