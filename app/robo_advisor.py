@@ -56,11 +56,13 @@ parsed_response =json.loads(response.text) # variable, parse str to dict
 #
 #INFO OUTPUTS
 #
+print(parsed_response)
 
 now = datetime.datetime.now().replace(microsecond=0)
 AMPM = now.strftime("%p")
 
 last_refreshed =parsed_response["Meta Data"]["3. Last Refreshed"]
+
 
 tsd =parsed_response["Time Series (Daily)"]
 #assumes latest day is first, consider sorting
@@ -91,7 +93,7 @@ for date in dates:
     closing_prices.append(float(closing_price))
 
 
- 
+print(dates)
 
 
 #max_high = [high for high in parsed_response["Time Series (Daily)"][f"{last_tradedate}"]["2. high"] ]
